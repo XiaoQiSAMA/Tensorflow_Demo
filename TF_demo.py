@@ -10,7 +10,9 @@ train_Y = 2 * train_X + np.random.randn(*train_X.shape) * 0.3
 #显示模拟数据点
 plt.plot(train_X, train_Y, 'ro', label = 'Original data')
 plt.legend()
-#plt.show()
+plt.show()
+
+tf.reset_default_graph()
 
 
 """ 公式：z = w * x + b"""
@@ -36,6 +38,9 @@ init = tf.global_variables_initializer()
 #定义参数
 training_epochs = 20
 display_step = 2
+
+saver = tf.train.Saver()
+savedir = "/home/xiaoqi/Documents/Tensorflow/log"
 
 #启动session
 with tf.Session() as sess:
@@ -80,4 +85,7 @@ with tf.Session() as sess:
 
     plt.show()
 
-    print("x = 0.2, z = ", sess.run(z, feed_dict={X: 0.2}))
+    with tf.Session() as sess2:
+        sess2.run(tf.global_variables_initializer())
+        saver.restore(sess2, savedir+"linermodel.cpkt")
+        print("x=0.2, z=", sess2.run(z, feed_dict={x: 0.2}))
